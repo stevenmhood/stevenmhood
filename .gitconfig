@@ -1,15 +1,21 @@
+[core]
+    editor = gvim -f
 [alias]
-	br = branch -a -v -v
-	lg = log --graph --pretty=format:'%C(cyan)%h%Creset -%C(bold yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-	co = checkout
-	pr = pull --rebase
+    br = branch -a -v -v
+    lg = log --graph --pretty=format:'%C(cyan)%h%Creset -%C(bold yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    co = checkout
+    pr = pull --rebase
+    rc = rebase --continue
+    st = status
 [color]
-	ui = true
+    ui = true
 [color "diff"]
-	meta = yellow
-	func = magenta
+    meta = yellow
+    func = magenta
 [color "status"]
-	added = green
-	untracked = red
-	nobranch = bold red
-	changed = yellow
+    added = green
+    untracked = red
+    nobranch = bold red
+    changed = yellow
+[push]
+    default = simple

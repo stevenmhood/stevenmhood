@@ -1,0 +1,52 @@
+#!/bin/sh
+
+agent_count=$(ps -s | grep ssh-agent | wc -l)
+if [ $agent_count -gt 1 ]; then
+    echo "Multiple SSH agents running.  Cleaning them all."
+    (ps -s | grep ssh-agent | awk '{print $1}' | xargs kill &)
+    wait
+    rm -rf /tmp/ssh*
+    echo "SSH agents cleaned."
+fi
+
+# Find current ssh-agent 
+pid=$(ps -s | grep ssh-agent | awk '{print $1}')
+ppid=$(ps -f | grep ssh-agent | awk '{print $3}')
+
+if [ -z $pid ]; then
+    echo "No agent running."
+    echo "Starting agent..."
+    ssh-agent -s -d > /dev/null 2>&1 &
+else
+    if [ $ppid -eq 1 ]; then
+        echo "Killing $pid, its parent is $ppid"
+        (kill $pid &)
+        wait
+        unset pid
+        echo "Starting agent..."
+        ssh-agent -s -d & > /dev/null
+    fi
+fi
+
+# Find pid
+pid=$(ps -s | grep ssh-agent | awk '{print $1}')
+echo "Agent running as process $pid"
+
+# Find socket
+socket=$(ls /tmp/ssh*/*$pid)
+echo "Agent using socket $socket"
+
+# Set environment variables
+export SSH_AGENT_PID=$pid
+export SSH_AUTH_SOCK=$socket
+
+agent_has_keys() {
+    echo "Checking for keys..."
+    ssh-add -l > /dev/null 2>&1
+}
+
+if ! agent_has_keys; then
+    echo "Adding identities..."
+    ssh-add
+    ssh-add ~/.ssh/github_id_rsa
+fi
