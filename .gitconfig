@@ -22,5 +22,5 @@
 [push]
     default = simple
 [user]
-    email = stevenmhood@gmail.com
     name = Steven Hood
+    email = stevenmhood+github@gmail.com
