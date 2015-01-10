@@ -1,5 +1,7 @@
 [core]
     editor = gvim -f
+    autocrlf = true
+    fscache = true # Speed up windows filesystem by disabling UAC
 [alias]
     br = branch -a -v -v
     lg = log --graph --pretty=format:'%C(cyan)%h%Creset -%C(bold yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
@@ -19,3 +21,6 @@
     changed = yellow
 [push]
     default = simple
+[user]
+    email = stevenmhood@gmail.com
+    name = Steven Hood
