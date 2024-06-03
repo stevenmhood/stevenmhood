@@ -50,6 +50,10 @@ precmd()
     # Shortened form of the directory, removes all lowercase letters, except the
     # first letter of a word/fragment.
     SHORT_PWD=$(pwd | sed -e 's_\([A-Z]\)[a-z]*_\1_g' -e 's_\([a-z]\)[a-z]*_\1_g')
+
+    # Git branch info
+    vcs_info
+    GIT_PROMPT='%{$terminfo[bold]${fg[cyan]}%}${vcs_info_msg_0_}%{$reset_color$terminfo[sgr0]%}'
 }
 
 preexec()
@@ -71,7 +75,7 @@ case $TERM in
         setopt prompt_subst
         USER_PROMPT='$prompt_color%m:%{$reset_color%}'
         # Must line wrap to display correctly
-        PROMPT='${(e)USER_PROMPT} $SHORT_PWD${(e)GIT_PROMPT}${(e)VS_PROMPT}
+        PROMPT='${(e)USER_PROMPT} $SHORT_PWD${(e)GIT_PROMPT}
 %h > '
         # Right prompt
         export RPS1="%D{%a, %b %d, %Y %T}"
@@ -137,6 +141,15 @@ function u() {
         ud="${ud}/.."
     }
     cd $ud
+}
+
+# Colorize log files
+function lc() {
+    sed 's/\(\[DEBUG\]\)/\o033[36m\1\o033[0m/g
+         s/\(\[INFO\]\)/\o033[32m\1\o033[0m/g
+         s/\(\[WARN\]\)/\o033[33m\1\o033[0m/g
+         s/\(\[ERROR\]\)/\o033[31m\1\o033[0m/g
+         s/\(\[FATAL\]\)/\o033[31;1m\1\o033[0m/g'
 }
 
 autoload -Uz compinit && compinit
