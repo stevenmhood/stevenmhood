@@ -95,12 +95,15 @@ bindkey -v      # VI is better than Emacs
 bindkey "" history-incremental-search-backward
 bindkey '' end-of-line
 bindkey '' beginning-of-line
-#pushes current command on command stack and gives blank line, after that line
-#runs command stack is popped
+# Push current command on stack, pops after next command
 bindkey "^t" push-line-or-edit
 bindkey "^b" backward-word
 bindkey "^f" forward-word
 # VI editing mode is a pain to use if you have to wait for <ESC> to register.
+# This times out multi-char key combos as fast as possible (1/100th of second)
+KEYTIMEOUT=1
+autoload -U edit-command-line
+zle -N edit-command-line
 bindkey -M vicmd v edit-command-line
 
 # History settings
@@ -111,3 +114,31 @@ setopt HIST_IGNORE_DUPS
 HISTSIZE=110000
 SAVEHIST=100000
 HISTFILE=${HOME}/.history
+
+# Type in a directory to cd there
+setopt AUTO_CD
+# Shell shortcuts
+alias d='ls -laFo --color=auto'
+alias du1='du -h --max-depth=1'
+alias h='cd ~'
+alias x='exit'
+alias grep='grep -n --color=auto'
+
+# Custom functions
+# Tail last
+function tl() {
+    tail -f $(/usr/bin/ls -t1 $1* | head -1)
+}
+# Go up N directories
+function u() {
+    ud="."
+    # ${1-1} means use $1 if defined, else default to 1.
+    for i ( $(seq 1 ${1-1}) ) {
+        ud="${ud}/.."
+    }
+    cd $ud
+}
+
+autoload -Uz compinit && compinit
+
+export AWS_EC2_METADATA_DISABLED=true 
