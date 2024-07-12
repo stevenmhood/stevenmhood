@@ -75,7 +75,7 @@ preexec()
 }
 
 case $TERM in
-    (xterm*|screen*)
+    (tmux*|xterm*|screen*)
         setopt prompt_subst
         USER_PROMPT='%{$fg[green]%}%m:%{$reset_color%}'
         # Must line wrap to display correctly
