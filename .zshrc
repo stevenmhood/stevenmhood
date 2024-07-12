@@ -1,6 +1,4 @@
 # .zshrc is sourced in interactive shells.
-# It should contain commands to set up aliases,
-# functions, options, key bindings, etc.
 
 # Confirm umask is an appropriate value
 if [[ "$(umask)" = "000" ]]; then
@@ -32,6 +30,11 @@ colors
 
 # Used in tmux window titles
 SHORT_HOST="$(hostname | cut -f1 -d.) - "
+
+# Prompt settings
+if [[ -f ~/.zshrcs/vcs_info.zsh ]]; then
+    source ~/.zshrcs/vcs_info.zsh
+fi
 
 # Environment
 # \e[0; sets the window title

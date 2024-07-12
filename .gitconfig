@@ -1,6 +1,6 @@
 [core]
-    editor = gvim -f
-    autocrlf = true
+    editor = vim -f
+    autocrlf = input
     fscache = true # Speed up windows filesystem by disabling UAC
 [alias]
     br = branch -a -v -v
