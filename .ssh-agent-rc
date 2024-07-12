@@ -1,43 +1,19 @@
 #!/bin/sh
 
-agent_count=$(ps -s | grep ssh-agent | wc -l)
-if [ $agent_count -gt 1 ]; then
-    echo "Multiple SSH agents running.  Cleaning them all."
-    (ps -s | grep ssh-agent | awk '{print $1}' | xargs kill &)
-    wait
-    rm -rf /tmp/ssh*
-    echo "SSH agents cleaned."
-fi
+SSH_AGENT_PID=$(ps -C ssh-agent --sort +start_time --no-headers | head -n1 | awk '{print $1}')
+echo "SSH_AGENT_PID (ps) is [${SSH_AGENT_PID}]"
 
-# Find current ssh-agent 
-pid=$(ps -s | grep ssh-agent | awk '{print $1}')
-ppid=$(ps -f | grep ssh-agent | awk '{print $3}')
-
-if [ -z $pid ]; then
-    echo "No agent running."
-    echo "Starting agent..."
-    ssh-agent -s -d > /dev/null 2>&1 &
+if [ "x${SSH_AGENT_PID}" = "x" ]; then
+    echo "Starting SSH Agent..."
+    eval "$(ssh-agent -s)"
 else
-    if [ $ppid -eq 1 ]; then
-        echo "Killing $pid, its parent is $ppid"
-        (kill $pid &)
-        wait
-        unset pid
-        echo "Starting agent..."
-        ssh-agent -s -d & > /dev/null
-    fi
+    echo "SSH Agent using PID ${SSH_AGENT_PID}"
 fi
-
-# Find pid
-pid=$(ps -s | grep ssh-agent | awk '{print $1}')
-echo "Agent running as process $pid"
 
 # Find socket
-socket=$(ls /tmp/ssh*/*$pid)
+socket=$(ls -t1 /tmp/ssh*/*$((SSH_AGENT_PID-1)) | head -n1)
 echo "Agent using socket $socket"
 
-# Set environment variables
-export SSH_AGENT_PID=$pid
 export SSH_AUTH_SOCK=$socket
 
 agent_has_keys() {
@@ -46,8 +22,10 @@ agent_has_keys() {
 }
 
 if ! agent_has_keys; then
+    #sleep 2
     echo "Adding identities..."
     ssh-add
-    ssh-add ~/.ssh/github_id_rsa
     ssh-add ~/.ssh/bitbucket_id_rsa
+    ssh-add ~/.ssh/darthsharkie_github_id_ed25519
+    ssh-add ~/.ssh/silverkey-20161007.pem
 fi
