@@ -1,6 +1,12 @@
 #!/bin/sh
 
-SSH_AGENT_PID=$(ps -C ssh-agent --sort +start_time --no-headers | head -n1 | awk '{print $1}')
+if [[ -d /System ]]; then
+    # Mac
+    SSH_AGENT_PID=$(ps -ec | /usr/bin/grep ssh-agent | awk '{print $1}')
+else
+    # Linux
+    SSH_AGENT_PID=$(ps -C ssh-agent --sort +start_time --no-headers | head -n1 | awk '{print $1}')
+fi
 echo "SSH_AGENT_PID (ps) is [${SSH_AGENT_PID}]"
 
 if [ "x${SSH_AGENT_PID}" = "x" ]; then
@@ -11,8 +17,14 @@ else
 fi
 
 # Find socket
-socket=$(ls -t1 /tmp/ssh*/*$((SSH_AGENT_PID-1)) | head -n1)
-echo "Agent using socket $socket"
+if [[ -d /System ]]; then
+    # Mac
+    socket=$(ls -t1 $TMPDIR/ssh-*/agent.* | head -n1)
+else
+    # Linux
+    socket=$(ls -t1 $TMPDIR/ssh*/*$((SSH_AGENT_PID-1)) | head -n1)
+fi
+echo "Agent using socket: $socket"
 
 export SSH_AUTH_SOCK=$socket
 
@@ -25,7 +37,5 @@ if ! agent_has_keys; then
     #sleep 2
     echo "Adding identities..."
     ssh-add
-    ssh-add ~/.ssh/bitbucket_id_rsa
-    ssh-add ~/.ssh/darthsharkie_github_id_ed25519
-    ssh-add ~/.ssh/silverkey-20161007.pem
+    ssh-add ~/.ssh/id_rsa
 fi

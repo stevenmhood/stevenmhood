@@ -16,6 +16,22 @@ case ":${PATH}:" in
     *) PATH="$PATH:$HOME/bin" ;;
 esac
 
+# Add homebrew to $PATH
+if [[ -f /opt/homebrew/bin/brew ]]; then
+    case ":${PATH}:" in
+        *:/opt/homebrew/bin:*) ;; # Already exists
+        *)
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+            export FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+            # gnu tooling
+            GNU_PATH=$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin
+            export PATH=$GNU_PATH:$PATH
+            GNU_MANPATH=$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman
+            MANPATH=$GNU_MANPATH:$MANPATH
+    esac
+fi
+
 # Always UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
@@ -127,6 +143,7 @@ alias h='cd ~'
 alias x='exit'
 alias grep='grep -n --color=auto'
 alias p='ps -ef | grep $1'
+alias w='cd /workplace'
 
 # Custom functions
 # Tail last
@@ -152,7 +169,7 @@ function lc() {
          s/\(\[FATAL\]\)/\o033[31;1m\1\o033[0m/g'
 }
 
-# Set up Bitbucket/Github SSH
+# Set up SSH
 source ~/.ssh-agent-rc
 
 autoload -Uz compinit && compinit
