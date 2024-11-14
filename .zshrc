@@ -48,63 +48,11 @@ colors
 SHORT_HOST="$(hostname | cut -f1 -d.) - "
 
 # Prompt settings
-if [[ -f ~/.zshrcs/vcs_info.zsh ]]; then
-    source ~/.zshrcs/vcs_info.zsh
+if [[ -z $(which starship) ]]; then
+    echo "Install starship!"
+else
+    eval "$(starship init zsh)"
 fi
-
-# Environment
-# \e[0; sets the window title
-# \e[30; sets the middle window title in Konsole
-precmd()
-{
-    # Title is the current directory
-    case $TERM in
-        xterm*)
-            echo -ne "\e]0;$SHORT_HOST - $(/usr/bin/basename $PWD)\a"
-        ;;
-        screen*)
-            echo -ne "\ek$SHORT_HOST - $(/usr/bin/basename $PWD)\e\\"
-        ;;
-    esac
-
-    # Shortened form of the directory, removes all lowercase letters, except the
-    # first letter of a word/fragment.
-    SHORT_PWD=$(pwd | sed -e 's_\([A-Z]\)[a-z]*_\1_g' -e 's_\([a-z]\)[a-z]*_\1_g')
-
-    # Git branch info
-    vcs_info
-    GIT_PROMPT='%{$terminfo[bold]${fg[cyan]}%}${vcs_info_msg_0_}%{$reset_color$terminfo[sgr0]%}'
-}
-
-preexec()
-{
-    local CMD=${1/% */}  # kill all text after and including the first space
-
-    case $TERM in
-        xterm*)
-            echo -ne "\e]0;$SHORT_HOST - $CMD\a"
-        ;;
-        screen*)
-            echo -ne "\ek$SHORT_HOST - $CMD\e\\"
-        ;;
-    esac
-}
-
-case $TERM in
-    (tmux*|xterm*|screen*)
-        setopt prompt_subst
-        USER_PROMPT='%{$fg[green]%}%m:%{$reset_color%}'
-        # Must line wrap to display correctly
-        PROMPT='${(e)USER_PROMPT} $SHORT_PWD ${(e)GIT_PROMPT}
-%h > '
-        # Right prompt
-        export RPS1="%D{%a, %b %d, %Y %T}"
-        ;;
-
-    dumb*)
-        PROMPT='> '
-        ;;
-esac
 
 export EDITOR=vim
 export PAGER="less -FiMRX"

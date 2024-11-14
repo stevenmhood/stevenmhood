@@ -1,0 +1,25 @@
+format = '''
+$hostname$directory$git_branch$git_state$time
+> 
+'''
+
+[hostname]
+format = '[($hostname:)]($style)'
+ssh_only = false
+style = 'green'
+aliases = {"StevenMBP" = "MBP"}
+
+[directory]
+truncate_to_repo = true
+fish_style_pwd_dir_length = 1
+style = 'white'
+
+[git_branch]
+format = '[(\($branch\))(:$remote_name/remote_branch)](cyan) '
+
+[git_state]
+style = 'yellow'
+
+[time]
+disabled = false
+time_format = '%F %T %Z'
