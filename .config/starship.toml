@@ -7,15 +7,16 @@ $hostname$directory$git_branch$git_state$time
 format = '[($hostname:)]($style)'
 ssh_only = false
 style = 'green'
-aliases = {"StevenMBP" = "MBP"}
+aliases = {"StevenMBP" = "MBP", "Range-Laptop" = "MBP"}
 
 [directory]
 truncate_to_repo = true
 fish_style_pwd_dir_length = 1
 style = 'white'
+repo_root_style = 'bold white'
 
 [git_branch]
-format = '[(\($branch\))(:$remote_name/remote_branch)](cyan) '
+format = '[($branch)](cyan bold)[( => $remote_name/$remote_branch)](cyan) '
 
 [git_state]
 style = 'yellow'
