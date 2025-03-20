@@ -16,6 +16,12 @@ case ":${PATH}:" in
     *) PATH="$PATH:$HOME/bin" ;;
 esac
 
+# Add ~/scripts to $PATH
+case ":${PATH}:" in
+    *:"$HOME/scripts":*) ;;   # Already exists
+    *) PATH="$PATH:$HOME/scripts" ;;
+esac
+
 # Add homebrew to $PATH
 if [[ -f /opt/homebrew/bin/brew ]]; then
     case ":${PATH}:" in
@@ -30,6 +36,11 @@ if [[ -f /opt/homebrew/bin/brew ]]; then
             GNU_MANPATH=$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman
             MANPATH=$GNU_MANPATH:$MANPATH
     esac
+fi
+
+if [[ -f ~/.zshrcs/range.zsh ]]; then
+    echo "Sourcing Range config"
+    source ~/.zshrcs/range.zsh
 fi
 
 # Always UTF-8
@@ -119,6 +130,11 @@ function lc() {
 
 # Set up SSH
 source ~/.ssh-agent-rc
+
+# Hook up direnv, if it exists
+if [[ -f ~/.zshrcs/direnv.zsh ]]; then
+    source ~/.zshrcs/direnv.zsh
+fi
 
 autoload -Uz compinit && compinit
 
