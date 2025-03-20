@@ -23,14 +23,14 @@ try {
   }
   ConfigJS.prototype = {
     observe: function (aSubject) { 
-      aSubject.addEventListener('DOMContentLoaded', this, {once: true}); 
+      aSubject.addEventListener('load', this, {once: true}); 
     },
     handleEvent: function (aEvent) {
       let document = aEvent.originalTarget; 
       let window = document.defaultView; 
       let location = window.location;
       if (/^(chrome:(?!\/\/(global\/content\/commonDialog|browser\/content\/webext-panels)\.x?html)|about:(?!blank))/i.test(location.href)) {
-        if (window._gBrowser) {
+        if (window.gBrowser) {
           applyCustomScriptToNewWindow(window);
         }
       }
