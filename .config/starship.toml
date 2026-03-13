@@ -1,5 +1,5 @@
 format = '''
-$hostname$directory$git_branch$git_state$time
+$hostname$directory$python$git_branch$git_state$time
 > 
 '''
 
@@ -13,7 +13,8 @@ aliases = {"StevenMBP" = "MBP", "Range-Laptop" = "MBP"}
 truncate_to_repo = true
 fish_style_pwd_dir_length = 1
 style = 'white'
-repo_root_style = 'bold white'
+repo_root_style = 'bold yellow'
+home_symbol = '/U/steven'
 
 [git_branch]
 format = '[($branch)](cyan bold)[( => $remote_name/$remote_branch)](cyan) '
@@ -24,3 +25,8 @@ style = 'yellow'
 [time]
 disabled = false
 time_format = '%F %T %Z'
+style = 'green'
+
+[python]
+detect_extensions = []
+pyenv_version_name = true
