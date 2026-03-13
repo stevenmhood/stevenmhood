@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+
+input=$(cat)
+
+# Priority: 1Password > ANTHROPIC_API_KEY env
+if command -v op &>/dev/null && api_key=$(op read "op://Employee/Anthropic Dev Key - 2025-10-09/credential" 2>/dev/null); then
+  auth_header="x-api-key: $api_key"
+elif [[ -n "$ANTHROPIC_API_KEY" ]]; then
+  auth_header="x-api-key: $ANTHROPIC_API_KEY"
+else
+  echo "No credentials found (set ANTHROPIC_API_KEY or configure 1Password)" >&2
+  exit 1
+fi
+
+curl -s https://api.anthropic.com/v1/messages/count_tokens \
+  -H "$auth_header" \
+  -H "content-type: application/json" \
+  -H "anthropic-version: 2023-06-01" \
+  -d "$(jq -n --arg text "$input" '{
+    model: "claude-sonnet-4-5-20250929",
+    messages: [{role: "user", content: $text}]
+  }')" | jq '.input_tokens'
