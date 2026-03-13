@@ -8,6 +8,8 @@
     br = branch -v -v
     lg = log --graph --pretty=format:'%C(cyan)%h%Creset -%C(bold yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
     co = checkout
+    pfo = push --force-with-lease origin
+    po = push origin
     pr = pull --rebase
     rc = rebase --continue
     st = status
@@ -26,3 +28,6 @@
 [user]
     name = Steven Hood
     email = stevenmhood+github@gmail.com
+[rerere]
+	enabled = true
+	autoupdate = true
