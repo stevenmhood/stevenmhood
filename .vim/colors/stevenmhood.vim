@@ -18,28 +18,28 @@ hi ErrorMsg     guifg=white     guibg=lightblue                       ctermfg=wh
 hi Visual       guifg=lightblue guibg=grey      gui=reverse           ctermfg=darkblue  ctermbg=lightgrey cterm=reverse
 hi VisualNOS    guifg=lightblue guibg=grey      gui=reverse,underline ctermfg=darkblue  ctermbg=lightgrey cterm=reverse,underline
 hi Todo         guifg=red       guibg=black                           ctermfg=red       ctermbg=black
-hi Search       guifg=white     guibg=black                           ctermfg=white     ctermbg=black     cterm=underline         term=underline
+hi Search       guifg=white     guibg=black                           ctermfg=white     ctermbg=black     cterm=underline
 hi IncSearch    guifg=black     guibg=gray                            ctermfg=black     ctermbg=gray
 
 hi SpecialKey   guifg=cyan                                            ctermfg=darkcyan
 hi Directory    guifg=cyan                                            ctermfg=cyan
 hi Title        guifg=magenta                   gui=none              ctermfg=magenta                     cterm=bold
 hi WarningMsg   guifg=red                                             ctermfg=red
-hi WildMenu     guifg=yellow    guibg=black                           ctermfg=yellow    ctermbg=black     cterm=none              term=none
+hi WildMenu     guifg=yellow    guibg=black                           ctermfg=yellow    ctermbg=black     cterm=none
 hi ModeMsg      guifg=lightblue                                       ctermfg=lightblue
 hi MoreMsg                                                            ctermfg=darkgreen
 hi Question     guifg=green                     gui=none              ctermfg=green                       cterm=none
 hi NonText      guifg=lightcyan                                       ctermfg=lightcyan
 
-hi StatusLine   guifg=lightblue guibg=gray      gui=none              ctermfg=black     ctermbg=darkgreen cterm=none term=none
-hi StatusLineNC guifg=black     guibg=gray      gui=none              ctermfg=darkgreen ctermbg=black     cterm=none term=none
-hi VertSplit    guifg=black     guibg=gray      gui=none              ctermfg=green     ctermbg=black     cterm=none term=none
+hi StatusLine   guifg=lightblue guibg=gray      gui=none              ctermfg=black     ctermbg=darkgreen cterm=none
+hi StatusLineNC guifg=black     guibg=gray      gui=none              ctermfg=darkgreen ctermbg=black     cterm=none
+hi VertSplit    guifg=black     guibg=gray      gui=none              ctermfg=green     ctermbg=black     cterm=none
 
-hi Folded       guifg=darkgrey  guibg=black                           ctermfg=darkgrey  ctermbg=black     cterm=bold term=bold
-hi FoldColumn   guifg=darkgrey  guibg=black                           ctermfg=darkgrey  ctermbg=black     cterm=bold term=bold
+hi Folded       guifg=darkgrey  guibg=black                           ctermfg=darkgrey  ctermbg=black     cterm=bold
+hi FoldColumn   guifg=darkgrey  guibg=black                           ctermfg=darkgrey  ctermbg=black     cterm=bold
 hi LineNr       guifg=green                                           ctermfg=green                       cterm=none
 
-hi DiffAdd                      guibg=black                                             ctermbg=black     cterm=none term=none
+hi DiffAdd                      guibg=black                                             ctermbg=black     cterm=none
 hi DiffChange                   guibg=darkmagenta                                       ctermbg=magenta   cterm=none
 hi DiffDelete   guifg=Blue      guibg=DarkCyan  gui=bold              ctermfg=lightblue ctermbg=cyan
 hi DiffText                     guibg=Red       gui=bold                                ctermbg=red       cterm=bold
@@ -53,6 +53,6 @@ hi Special      guifg=Orange    gui=none    ctermfg=lightblue    cterm=none
 hi Identifier   guifg=cyan                  ctermfg=lightcyan    cterm=none
 hi Statement    guifg=yellow    gui=none    ctermfg=yellow       cterm=none
 hi PreProc      guifg=magenta   gui=none    ctermfg=lightmagenta cterm=none
-hi type         guifg=green     gui=none    ctermfg=lightgreen   cterm=none
-hi Underlined                                                    cterm=underline term=underline
+hi Type         guifg=green     gui=none    ctermfg=lightgreen   cterm=none
+hi Underlined                                                    cterm=underline
 hi Ignore       guifg=black                 ctermfg=black
