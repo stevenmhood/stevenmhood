@@ -1,12 +1,15 @@
 set runtimepath=$HOME/.vim,$VIMRUNTIME,$HOME/.vim/after
 
+" Use faster TS syntax
+set runtimepath^=~/.vim/pack/plugins/start/yats.vim
+
 set nocompatible          " Use Vim defaults (much better!)
 set autoindent            " always set autoindenting on
 set backspace=2           " allow backspacing over everything in insert mode
 set expandtab             " Get rid of tabs altogether and replace with spaces
-set foldcolumn=2          " set a column in case it's needed
-set foldlevel=0           " show all folds initially
-set foldmethod=indent     " use indent unless overridden
+"set foldcolumn=2          " set a column in case it's needed
+"set foldlevel=0           " show all folds initially
+"set foldmethod=indent     " use indent unless overridden
 set guioptions-=m         " Remove menu
 set guioptions-=T         " Remove toolbar
 set hidden                " hide buffers, don't close
@@ -29,6 +32,16 @@ set textwidth=120         " This wraps a line with a break when you reach 120 ch
 set titlestring=vim\:\ %t%(\ %)%M
 set whichwrap+=<,>,[,],h,l,~  " Arrows keys can wrap in normal and insert modes
 
+" aiming for some speedups with these
+set lazyredraw
+set ttyfast
+set nocursorline
+set nocursorcolumn
+set foldmethod=manual
+set nofoldenable
+set redrawtime=500
+
+
 syntax on
 filetype plugin indent on
 
@@ -40,5 +53,4 @@ autocmd FileType python setlocal textwidth=100 softtabstop=4 shiftwidth=4
 let &t_SI = "\<Esc>[6 q"
 let &t_SR = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[2 q"
-
 

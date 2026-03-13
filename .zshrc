@@ -16,6 +16,12 @@ case ":${PATH}:" in
     *) PATH="$PATH:$HOME/bin" ;;
 esac
 
+# Add ~/.local/bin to $PATH
+case ":${PATH}:" in
+    *:"$HOME/.local/bin":*) ;;   # Already exists
+    *) PATH="$PATH:$HOME/.local/bin" ;;
+esac
+
 # Add ~/scripts to $PATH
 case ":${PATH}:" in
     *:"$HOME/scripts":*) ;;   # Already exists
@@ -136,5 +142,8 @@ if [[ -f ~/.zshrcs/direnv.zsh ]]; then
     source ~/.zshrcs/direnv.zsh
 fi
 
-autoload -Uz compinit && compinit
+if [[ -d ~/.zshrcs/completions ]]; then
+    export FPATH="~/.zshrcs/completions:${FPATH}"
+fi
 
+autoload -Uz compinit && compinit

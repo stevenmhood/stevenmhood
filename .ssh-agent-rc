@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# If SSH_AUTH_SOCK is already set and the socket exists, use it (e.g., Docker agent forwarding)
+if [ -n "$SSH_AUTH_SOCK" ] && [ -S "$SSH_AUTH_SOCK" ]; then
+    ssh-add -l > /dev/null 2>&1 && return 0 2>/dev/null || true
+fi
+
 if [[ -d /System ]]; then
     # Mac
     SSH_AGENT_PID=$(ps -ec | /usr/bin/grep ssh-agent | awk '{print $1}')
@@ -37,5 +42,5 @@ if ! agent_has_keys; then
     #sleep 2
     echo "Adding identities..."
     ssh-add
-    ssh-add ~/.ssh/id_rsa
+    ssh-add ~/.ssh/id_ed25519
 fi
