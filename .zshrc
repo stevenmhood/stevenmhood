@@ -147,3 +147,11 @@ if [[ -d ~/.zshrcs/completions ]]; then
 fi
 
 autoload -Uz compinit && compinit
+
+# Tmux window naming: clear @branch pane option so status bar
+# falls back to #{b:pane_current_path} for interactive shells
+_tmux_window_name() {
+  [[ -n "$TMUX" ]] || return
+  tmux set-option -pu @branch 2>/dev/null
+}
+add-zsh-hook precmd _tmux_window_name
