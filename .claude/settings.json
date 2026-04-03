@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(acli jira workitem:*)",
+      "Bash(awk *)",
+      "Bash(aws --version *)",
+      "Bash(aws cloudwatch get-*)",
+      "Bash(aws codeartifact list-*)",
+      "Bash(aws codepipeline get-*)",
+      "Bash(aws codepipeline list-*)",
+      "Bash(aws codepipeline list-pipeline-executions *)",
+      "Bash(aws ec2 describe-*)",
+      "Bash(aws ec2 list-*)",
+      "Bash(aws ecs describe-*)",
+      "Bash(aws ecs list-*)",
+      "Bash(aws elbv2 describe-*)",
+      "Bash(aws events describe-*)",
+      "Bash(aws events list-*)",
+      "Bash(aws logs describe-*)",
+      "Bash(aws logs filter-*)",
+      "Bash(aws logs get-*)",
+      "Bash(aws logs list-*)",
+      "Bash(aws logs start-query *)",
+      "Bash(aws s3 ls *)",
+      "Bash(aws s3api get-*)",
+      "Bash(aws s3api head-object *)",
+      "Bash(aws s3api list-*)",
+      "Bash(aws sagemaker describe-*)",
+      "Bash(aws sagemaker list-*)",
+      "Bash(aws ses get-*)",
+      "Bash(aws sns get-*)",
+      "Bash(aws sns list-*)",
+      "Bash(aws sqs get-*)",
+      "Bash(aws sqs list-*)",
+      "Bash(basename *)",
+      "Bash(cat *)",
+      "Bash(codex *)",
+      "Bash(comm *)",
+      "Bash(cut *)",
+      "Bash(date *)",
+      "Bash(diff *)",
+      "Bash(dirname *)",
+      "Bash(echo *)",
+      "Bash(env *)",
+      "Bash(file *)",
+      "Bash(find *)",
+      "Bash(gh pr checkout *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh pr comment *)",
+      "Bash(gh pr diff *)",
+      "Bash(gh pr edit *)",
+      "Bash(gh pr list *)",
+      "Bash(gh pr ready *)",
+      "Bash(gh pr view *)",
+      "Bash(gh run list *)",
+      "Bash(gh run rerun *)",
+      "Bash(gh run view *)",
+      "Bash(git *)",
+      "Bash(grep *)",
+      "Bash(head *)",
+      "Bash(jq *)",
+      "Bash(ls *)",
+      "Bash(lsof *)",
+      "Bash(md5 *)",
+      "Bash(mkdir *)",
+      "Bash(npm i *)",
+      "Bash(npm info *)",
+      "Bash(npm install *)",
+      "Bash(npm ls *)",
+      "Bash(npm run build *)",
+      "Bash(npm run test:unit *)",
+      "Bash(npm run typecheck *)",
+      "Bash(npm view *)",
+      "Bash(npx tsc *)",
+      "Bash(pbcopy *)",
+      "Bash(playwright-cli *)",
+      "Bash(pnpm *)",
+      "Bash(pnpx tsc *)",
+      "Bash(ps *)",
+      "Bash(pup *)",
+      "Bash(realpath *)",
+      "Bash(rg *)",
+      "Bash(sed *)",
+      "Bash(shasum *)",
+      "Bash(sleep *)",
+      "Bash(sort *)",
+      "Bash(stat *)",
+      "Bash(tail *)",
+      "Bash(tee *)",
+      "Bash(tmux capture-pane *)",
+      "Bash(tmux list-sessions *)",
+      "Bash(touch *)",
+      "Bash(tr *)",
+      "Bash(uniq *)",
+      "Bash(wc *)",
+      "Bash(which *)",
+      "Bash(xargs *)",
+      "Bash(zcat *)",
+      "Edit(//Users/Steven/Obsidian/Notes/Projects/claude-notes/**)",
+      "Edit(//Users/Steven/Obsidian/Notes/Projects/claude-plans/**)",
+      "Edit(//tmp/**)",
+      "Read(//Users/Steven/Obsidian/Notes/Projects/claude-notes/**)",
+      "Read(//Users/Steven/Obsidian/Notes/Projects/claude-plans/**)",
+      "Read(//tmp/**)",
+      "Skill(commit-changes)",
+      "Skill(create-branch)",
+      "Skill(pull-request-creation)",
+      "Skill(push-to-origin)",
+      "Skill(rebase-branch)",
+      "Skill(stage-files)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:github.com)",
+      "WebSearch",
+      "Write(//Users/Steven/Obsidian/Notes/Projects/claude-notes/**)",
+      "Write(//Users/Steven/Obsidian/Notes/Projects/claude-plans/**)",
+      "Write(//tmp/**)",
+      "mcp__ide__getDiagnostics"
+    ],
+    "deny": [
+      "Bash(pup dashboards create *)",
+      "Bash(pup dashboards delete *)",
+      "Bash(pup dashboards update *)",
+      "Bash(pup metrics metadata update *)",
+      "Bash(pup metrics submit *)",
+      "Bash(pup monitors create *)",
+      "Bash(pup monitors delete *)",
+      "Bash(pup monitors update *)",
+      "Bash(pnpm publish *)",
+      "Bash(playwright-cli run-code *)",
+      "Bash(playwright-cli eval *)",
+      "Read(//Users/steven/.claude/secrets/**)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "opus[1m]",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/tmux-window-name.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/gh-api-readonly.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/git-safety.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/tmux-window-name.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt|elicitation_dialog",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/claude-attention-on.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/claude-attention-on.sh"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/demeanor-reminder.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/claude-attention-off.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
+  },
+  "effortLevel": "high",
+  "plansDirectory": "/Users/Steven/Obsidian/Notes/Projects/claude-plans",
+  "skipAutoPermissionPrompt": true
+}
