@@ -1,0 +1,59 @@
+# Ignore everything by default — whitelist what we want tracked.
+# For subdirectories: must unignore each parent level or git won't
+# traverse in, and child negations (!path) will have no effect.
+*
+
+# Top-level dotfiles
+!.bashrc
+!.dir_colors
+!.gitconfig
+!.gitignore
+!.ssh-agent-rc
+!.tmux.conf
+!.toprc
+!.vimrc
+!_vimrc
+
+# .claude — whitelist specific paths
+!.claude/
+.claude/*
+!.claude/docs/
+!.claude/docs/*
+.claude/docs/plans/
+!.claude/hooks/
+!.claude/hooks/**
+!.claude/settings.json
+!.claude/statusline-command.sh
+
+# .config — only starship
+!.config/
+.config/*
+!.config/starship.toml
+
+# .vim — only colors
+!.vim/
+.vim/*
+!.vim/colors/
+!.vim/colors/**
+
+# .zshrcs — shell plugins
+!.zshrcs/
+.zshrcs/*
+!.zshrcs/direnv.zsh
+!.zshrcs/mac.zsh
+!.zshrcs/vcs_info.zsh
+!.zshrcs/wsl.zsh
+
+# scripts
+!scripts/
+scripts/*
+!scripts/claude-bedrock
+!scripts/config-pref.js
+!scripts/config-steven.js
+!scripts/count-tokens
+!scripts/findup
+!scripts/yesno
+
+# Swap files (redundant with * but explicit)
+*.swp
+*.zwc
