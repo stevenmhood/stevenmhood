@@ -5,42 +5,44 @@ if [ -n "$SSH_AUTH_SOCK" ] && [ -S "$SSH_AUTH_SOCK" ]; then
     ssh-add -l > /dev/null 2>&1 && return 0 2>/dev/null || true
 fi
 
-if [[ -d /System ]]; then
-    # Mac
-    SSH_AGENT_PID=$(ps -ec | /usr/bin/grep ssh-agent | awk '{print $1}')
+# Find existing ssh-agent PID
+if [ -d /System ]; then
+    # macOS
+    SSH_AGENT_PID=$(ps -ec 2>/dev/null | command grep ssh-agent | awk '{print $1}')
 else
-    # Linux
-    SSH_AGENT_PID=$(ps -C ssh-agent --sort +start_time --no-headers | head -n1 | awk '{print $1}')
-fi
-echo "SSH_AGENT_PID (ps) is [${SSH_AGENT_PID}]"
-
-if [ "x${SSH_AGENT_PID}" = "x" ]; then
-    echo "Starting SSH Agent..."
-    eval "$(ssh-agent -s)"
-else
-    echo "SSH Agent using PID ${SSH_AGENT_PID}"
+    # Linux / WSL2
+    SSH_AGENT_PID=$(ps -C ssh-agent --sort=+start_time --no-headers 2>/dev/null | head -n1 | awk '{print $1}')
 fi
 
-# Find socket
-if [[ -d /System ]]; then
-    # Mac
-    socket=$(ls -t1 $TMPDIR/ssh-*/agent.* | head -n1)
-else
-    # Linux
-    socket=$(ls -t1 $TMPDIR/ssh*/*$((SSH_AGENT_PID-1)) | head -n1)
-fi
-echo "Agent using socket: $socket"
-
-export SSH_AUTH_SOCK=$socket
-
-agent_has_keys() {
-    echo "Checking for keys..."
-    ssh-add -l > /dev/null 2>&1
+# Find socket for the running agent
+find_agent_socket() {
+    # Look for any ssh-agent socket in TMPDIR (or /tmp as fallback)
+    _search_dir="${TMPDIR:-/tmp}"
+    _socket=$(find "$_search_dir" -path '*/ssh-*/agent.*' -type s -user "$(id -u)" 2>/dev/null | head -n1)
+    echo "$_socket"
 }
 
-if ! agent_has_keys; then
-    #sleep 2
+if [ -n "$SSH_AGENT_PID" ]; then
+    socket=$(find_agent_socket)
+    if [ -n "$socket" ] && [ -S "$socket" ]; then
+        echo "SSH Agent using PID ${SSH_AGENT_PID}, socket: $socket"
+        export SSH_AUTH_SOCK="$socket"
+        export SSH_AGENT_PID
+    else
+        # Stale agent: PID exists but socket is gone — kill and restart
+        echo "Stale SSH Agent (PID ${SSH_AGENT_PID}, no socket) — restarting..."
+        kill "$SSH_AGENT_PID" 2>/dev/null
+        unset SSH_AGENT_PID
+        eval "$(ssh-agent -s)"
+    fi
+else
+    echo "Starting SSH Agent..."
+    eval "$(ssh-agent -s)"
+fi
+
+# Add keys if agent has none
+if ! ssh-add -l > /dev/null 2>&1; then
     echo "Adding identities..."
     ssh-add
-    ssh-add ~/.ssh/id_ed25519
+    [ -f ~/.ssh/id_ed25519 ] && ssh-add ~/.ssh/id_ed25519
 fi
