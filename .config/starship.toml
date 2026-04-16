@@ -14,7 +14,7 @@ truncate_to_repo = true
 fish_style_pwd_dir_length = 1
 style = 'white'
 repo_root_style = 'bold yellow'
-home_symbol = '/U/steven'
+home_symbol = '~/steven'
 
 [git_branch]
 format = '[($branch)](cyan bold)[( => $remote_name/$remote_branch)](cyan) '
