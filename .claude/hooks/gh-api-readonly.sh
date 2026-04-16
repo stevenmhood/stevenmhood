@@ -48,6 +48,12 @@ EOF
 
 # Check if this is a mutating request
 is_mutation=false
+
+# Explicit GET — always safe, even with --raw-field/-f (they become query params)
+if echo "$command" | grep -iE '(-X|--method)\s+GET\b' > /dev/null; then
+  exit 0
+fi
+
 if echo "$command" | grep -iE '(-X|--method)\s+(POST|PUT|DELETE|PATCH)' > /dev/null; then
   is_mutation=true
 fi
