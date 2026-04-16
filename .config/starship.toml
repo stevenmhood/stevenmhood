@@ -1,5 +1,5 @@
 format = '''
-${custom.host}$hostname$directory$python$git_branch$git_state$time
+${custom.host}$directory$python$git_branch$git_state$time
 > 
 '''
 
