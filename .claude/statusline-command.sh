@@ -83,6 +83,7 @@ fi
 
 MODEL_DISPLAY=""
 case "$MODEL_ID" in
+    *"opus-4-7"*) MODEL_DISPLAY="Opus 4.7" ;;
     *"opus-4-6"*) MODEL_DISPLAY="Opus 4.6" ;;
     *"sonnet-4-6"*) MODEL_DISPLAY="Sonnet 4.6" ;;
     *"haiku-4-5"*) MODEL_DISPLAY="Haiku 4.5" ;;
