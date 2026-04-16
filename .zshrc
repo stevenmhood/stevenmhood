@@ -142,7 +142,9 @@ function lc() {
 }
 
 # Set up SSH
-source ~/.ssh-agent-rc
+if [[ -f ~/.ssh-agent-rc ]]; then
+    source ~/.ssh-agent-rc
+fi
 
 # Hook up direnv, if it exists
 if [[ -f ~/.zshrcs/direnv.zsh ]]; then
