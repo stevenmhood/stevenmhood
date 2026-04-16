@@ -108,7 +108,8 @@ setopt AUTO_CD
 
 # Shell shortcuts
 # unalias $(alias | cut -d= -f2) 2&> /dev/null
-alias d='ls -laFo --color=auto'
+# Do -F separate, so eza can handle it (it takes an argument in eza)
+alias d='ls -lao -F --color=auto'
 alias du1='du -h --max-depth=1'
 alias h='cd ~'
 alias x='exit'
