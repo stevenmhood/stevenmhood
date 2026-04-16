@@ -28,6 +28,12 @@ case ":${PATH}:" in
     *) PATH="$PATH:$HOME/scripts" ;;
 esac
 
+# Add ~/go/bin to $PATH
+case ":${PATH}:" in
+    *:"$HOME/go/bin":*) ;;   # Already exists
+    *) PATH="$PATH:$HOME/go/bin" ;;
+esac
+
 # Add homebrew to $PATH
 if [[ -f /opt/homebrew/bin/brew ]]; then
     case ":${PATH}:" in
