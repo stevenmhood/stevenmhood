@@ -1,7 +1,13 @@
 format = '''
-$hostname$directory$python$git_branch$git_state$time
+${custom.host}$hostname$directory$python$git_branch$git_state$time
 > 
 '''
+
+[custom.host]
+command = '[ -n "$CODER_WORKSPACE_NAME" ] && echo "$CODER_WORKSPACE_NAME" || hostname -s'
+when = "true"
+format = '[($output):]($style)'
+style = 'green'
 
 [hostname]
 format = '[($hostname:)]($style)'
