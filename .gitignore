@@ -25,10 +25,15 @@
 !.claude/settings.json
 !.claude/statusline-command.sh
 
-# .config — only starship
+# .config — starship + tmux drop-in fragments
 !.config/
 .config/*
 !.config/starship.toml
+!.config/tmux/
+.config/tmux/*
+!.config/tmux/conf.d/
+.config/tmux/conf.d/*
+!.config/tmux/conf.d/00-session-persistence.conf
 
 # .vim — only colors
 !.vim/
