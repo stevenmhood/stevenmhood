@@ -28,6 +28,12 @@ case ":${PATH}:" in
     *) PATH="$PATH:$HOME/scripts" ;;
 esac
 
+# Add ~/.cargo/bin to $PATH
+case ":${PATH}:" in
+    *:"$HOME/.cargo/bin":*) ;; # Already exists
+    *) PATH="$PATH:$HOME/.cargo/bin" ;;
+esac
+
 # Add ~/go/bin to $PATH
 case ":${PATH}:" in
     *:"$HOME/go/bin":*) ;;   # Already exists
@@ -164,3 +170,9 @@ _tmux_window_name() {
   tmux set-option -pu @branch 2>/dev/null
 }
 add-zsh-hook precmd _tmux_window_name
+
+# Set up Node
+# For reasons I don't (yet) understand, this must be after my own call to `compinit`
+if [[ -f ~/.zshrcs/node.zsh ]]; then
+    source ~/.zshrcs/node.zsh
+fi

@@ -45,4 +45,5 @@ if ! ssh-add -l > /dev/null 2>&1; then
     echo "Adding identities..."
     ssh-add
     [ -f ~/.ssh/id_ed25519 ] && ssh-add ~/.ssh/id_ed25519
+    [ -f ~/.ssh-agent-rc.local ] && . ~/.ssh-agent-rc.local
 fi
