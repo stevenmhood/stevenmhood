@@ -56,9 +56,8 @@ if [[ -f /opt/homebrew/bin/brew ]]; then
     esac
 fi
 
-if [[ -f ~/.zshrc.d/range.zsh ]]; then
-    echo "Sourcing Range config"
-    source ~/.zshrc.d/range.zsh
+if [[ -f ~/.zshrc.d/python.zsh ]]; then
+    source ~/.zshrc.d/python.zsh
 fi
 
 # Always UTF-8
@@ -157,11 +156,12 @@ if [[ -f ~/.zshrc.d/direnv.zsh ]]; then
     source ~/.zshrc.d/direnv.zsh
 fi
 
-if [[ -d ~/.zshrc.d/completions ]]; then
-    export FPATH="~/.zshrc.d/completions:${FPATH}"
-fi
-
 autoload -Uz compinit && compinit
+
+# znap + plugins (must come after compinit)
+if [[ -f ~/.zshrc.d/znap.zsh ]]; then
+    source ~/.zshrc.d/znap.zsh
+fi
 
 # Tmux window naming: clear @branch pane option so status bar
 # falls back to #{b:pane_current_path} for interactive shells

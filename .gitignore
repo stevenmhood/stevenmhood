@@ -50,8 +50,11 @@
 .zshrc.d/*
 !.zshrc.d/direnv.zsh
 !.zshrc.d/mac.zsh
+!.zshrc.d/node.zsh
+!.zshrc.d/python.zsh
 !.zshrc.d/vcs_info.zsh
 !.zshrc.d/wsl.zsh
+!.zshrc.d/znap.zsh
 
 # scripts
 !scripts/
