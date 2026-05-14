@@ -26,6 +26,8 @@
 [user]
     name = Steven Hood
     email = stevenmhood+github@gmail.com
+[include]
+    path = ~/.config/git/range-signing.gitconfig
 [rerere]
     enabled = true
     autoupdate = true
