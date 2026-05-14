@@ -7,7 +7,7 @@ fi
 
 # Check for WSL
 if [[ -f /proc/sys/fs/binfmt_misc/WSLInterop ]]; then
-    source ~/.zshrcs/wsl.zsh
+    source ~/.zshrc.d/wsl.zsh
 fi
 
 # Add ~/bin to $PATH
@@ -56,9 +56,9 @@ if [[ -f /opt/homebrew/bin/brew ]]; then
     esac
 fi
 
-if [[ -f ~/.zshrcs/range.zsh ]]; then
+if [[ -f ~/.zshrc.d/range.zsh ]]; then
     echo "Sourcing Range config"
-    source ~/.zshrcs/range.zsh
+    source ~/.zshrc.d/range.zsh
 fi
 
 # Always UTF-8
@@ -153,12 +153,12 @@ if [[ -f ~/.ssh-agent-rc ]]; then
 fi
 
 # Hook up direnv, if it exists
-if [[ -f ~/.zshrcs/direnv.zsh ]]; then
-    source ~/.zshrcs/direnv.zsh
+if [[ -f ~/.zshrc.d/direnv.zsh ]]; then
+    source ~/.zshrc.d/direnv.zsh
 fi
 
-if [[ -d ~/.zshrcs/completions ]]; then
-    export FPATH="~/.zshrcs/completions:${FPATH}"
+if [[ -d ~/.zshrc.d/completions ]]; then
+    export FPATH="~/.zshrc.d/completions:${FPATH}"
 fi
 
 autoload -Uz compinit && compinit
@@ -173,6 +173,6 @@ add-zsh-hook precmd _tmux_window_name
 
 # Set up Node
 # For reasons I don't (yet) understand, this must be after my own call to `compinit`
-if [[ -f ~/.zshrcs/node.zsh ]]; then
-    source ~/.zshrcs/node.zsh
+if [[ -f ~/.zshrc.d/node.zsh ]]; then
+    source ~/.zshrc.d/node.zsh
 fi

@@ -41,13 +41,13 @@
 !.vim/colors/
 !.vim/colors/**
 
-# .zshrcs — shell plugins
-!.zshrcs/
-.zshrcs/*
-!.zshrcs/direnv.zsh
-!.zshrcs/mac.zsh
-!.zshrcs/vcs_info.zsh
-!.zshrcs/wsl.zsh
+# .zshrc.d — shell plugins
+!.zshrc.d/
+.zshrc.d/*
+!.zshrc.d/direnv.zsh
+!.zshrc.d/mac.zsh
+!.zshrc.d/vcs_info.zsh
+!.zshrc.d/wsl.zsh
 
 # scripts
 !scripts/
