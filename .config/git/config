@@ -2,9 +2,7 @@
     editor = vim -f
     autocrlf = input
     fscache = true # Speed up windows filesystem by disabling UAC
-    excludesfile = ~/.gitignore_global
 [alias]
-    brr = branch -a -v -v
     br = branch -v -v
     lg = log --graph --pretty=format:'%C(cyan)%h%Creset -%C(bold yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
     co = checkout
