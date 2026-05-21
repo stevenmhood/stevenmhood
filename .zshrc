@@ -56,6 +56,10 @@ if [[ -f /opt/homebrew/bin/brew ]]; then
     esac
 fi
 
+if [[ -f ~/.zshrc.d/git.zsh ]]; then
+    source ~/.zshrc.d/git.zsh
+fi
+
 if [[ -f ~/.zshrc.d/python.zsh ]]; then
     source ~/.zshrc.d/python.zsh
 fi
