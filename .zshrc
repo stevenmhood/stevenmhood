@@ -180,3 +180,8 @@ add-zsh-hook precmd _tmux_window_name
 if [[ -f ~/.zshrc.d/node.zsh ]]; then
     source ~/.zshrc.d/node.zsh
 fi
+
+if [[ -f ~/.zshrc.d/range.zsh ]]; then
+    source ~/.zshrc.d/range.zsh
+fi
+
