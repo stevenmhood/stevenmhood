@@ -96,12 +96,12 @@ MODEL_DISPLAY="${MODEL_DISPLAY}${CONTEXT_SUFFIX}"
 # Format cost (round to 2 decimal places)
 COST_DISPLAY=$(printf "%.2f" "$TOTAL_COST")
 
-# Build context meter (20 blocks, each = 5%)
-FILLED=$(( (CONTEXT_USED_PCT + 2) / 5 ))
+# Build context meter (40 blocks, each = 2.5%)
+FILLED=$(( (CONTEXT_USED_PCT + 1) / 2.5 ))
 [ "$CONTEXT_USED_PCT" -gt 0 ] && [ "$FILLED" -eq 0 ] && FILLED=1
-[ "$FILLED" -gt 20 ] && FILLED=20
+[ "$FILLED" -gt 40 ] && FILLED=40
 METER=""
-for i in $(seq 1 20); do
+for i in $(seq 1 40); do
     if [ "$i" -le "$FILLED" ]; then
         METER="${METER}■"
     else
@@ -118,5 +118,5 @@ fi
 
 # Assemble status lines
 echo -e "${RESET}${WHITE}${PWD_DISPLAY}${RESET}${GIT_INFO}"
-echo -e "${RESET}${CLAUDE_ORANGE}CC ${VERSION}${RESET} ${WHITE}·${RESET} ${GREEN}\$${COST_DISPLAY}${RESET} ${WHITE}·${RESET} ${WHITE}(${GREEN}+${LINES_ADDED}${RESET}/${RED}-${LINES_REMOVED}${WHITE})${RESET}"
-echo -e "${RESET}${YELLOW}${MODEL_DISPLAY}${RESET} ${METER_COLOR}${METER}${RESET}"
+echo -e "${RESET}${YELLOW}${MODEL_DISPLAY}${RESET} ${WHITE}·${RESET} ${CLAUDE_ORANGE}CC ${VERSION}${RESET} ${WHITE}·${RESET} ${GREEN}\$${COST_DISPLAY}${RESET} ${WHITE}·${RESET} ${WHITE}(${GREEN}+${LINES_ADDED}${RESET}/${RED}-${LINES_REMOVED}${WHITE})${RESET}"
+echo -e "${RESET}${METER_COLOR}${METER}${RESET}"
