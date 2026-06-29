@@ -96,8 +96,10 @@ MODEL_DISPLAY="${MODEL_DISPLAY}${CONTEXT_SUFFIX}"
 # Format cost (round to 2 decimal places)
 COST_DISPLAY=$(printf "%.2f" "$TOTAL_COST")
 
-# Build context meter (40 blocks, each = 2.5%)
-FILLED=$(( (CONTEXT_USED_PCT + 1) / 2.5 ))
+# Build context meter (40 blocks, each = 2.5%). Claude Code sends
+# used_percentage as an integer (verified across 14k+ renders, as of CC
+# 2.1.195), so bash integer math is safe: divide by 2.5 as *2/5, truncating.
+FILLED=$(( CONTEXT_USED_PCT * 2 / 5 ))
 [ "$CONTEXT_USED_PCT" -gt 0 ] && [ "$FILLED" -eq 0 ] && FILLED=1
 [ "$FILLED" -gt 40 ] && FILLED=40
 METER=""
