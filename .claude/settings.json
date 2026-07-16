@@ -5,7 +5,6 @@
   },
   "permissions": {
     "allow": [
-      "Bash(acli jira workitem:*)",
       "Bash(awk *)",
       "Bash(aws --version *)",
       "Bash(aws cloudwatch get-*)",
@@ -115,9 +114,6 @@
       "WebFetch(domain:api.github.com)",
       "WebFetch(domain:github.com)",
       "WebSearch",
-      "Write(//Users/Steven/Obsidian/Notes/Projects/claude-notes/**)",
-      "Write(//Users/Steven/Obsidian/Notes/Projects/claude-plans/**)",
-      "Write(//tmp/**)",
       "mcp__ide__getDiagnostics"
     ],
     "deny": [
@@ -136,7 +132,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "fable",
   "hooks": {
     "SessionStart": [
       {
@@ -218,7 +214,43 @@
     "command": "~/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true,
+    "superpowers@superpowers-dev": true,
+    "agent-md-refactor@agent-toolkit": true,
+    "range-dev@range-plugins": true,
+    "postgres@range-plugins": true,
+    "datadog@range-plugins": true,
+    "cloudwatch@range-plugins": true,
+    "redshift@range-plugins": true,
+    "work-tools@range-plugins": true,
+    "jira@range-plugins": true,
+    "figma@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "superpowers-dev": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers"
+      }
+    },
+    "agent-toolkit": {
+      "source": {
+        "source": "github",
+        "repo": "softaworks/agent-toolkit"
+      }
+    },
+    "range-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "Range-Engineering/coding-agent-support"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    }
   },
   "effortLevel": "high",
   "plansDirectory": "/Users/Steven/Obsidian/Notes/Projects/claude-plans",
