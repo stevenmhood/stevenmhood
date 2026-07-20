@@ -5,6 +5,7 @@
   },
   "permissions": {
     "allow": [
+      "Bash(TZ=UTC ENVIRONMENT=test NODE_OPTIONS=--max-old-space-size=6144 pnpm *)",
       "Bash(awk *)",
       "Bash(aws --version *)",
       "Bash(aws cloudwatch get-*)",
@@ -71,12 +72,17 @@
       "Bash(npm install *)",
       "Bash(npm ls *)",
       "Bash(npm run build *)",
+      "Bash(npm run deps *)",
+      "Bash(npm run gen *)",
+      "Bash(npm run lint:changed *)",
       "Bash(npm run test:unit *)",
       "Bash(npm run typecheck *)",
       "Bash(npm view *)",
       "Bash(npx tsc *)",
       "Bash(pbcopy *)",
       "Bash(playwright-cli *)",
+      "Bash(pm2 describe *)",
+      "Bash(pm2 logs *)",
       "Bash(pnpm *)",
       "Bash(pnpx tsc *)",
       "Bash(ps *)",
@@ -101,9 +107,11 @@
       "Bash(zcat *)",
       "Edit(//Users/Steven/Obsidian/Notes/Projects/claude-notes/**)",
       "Edit(//Users/Steven/Obsidian/Notes/Projects/claude-plans/**)",
+      "Edit(//Users/steven/Obsidian/Notes/Daily Notes/**)",
       "Edit(//tmp/**)",
       "Read(//Users/Steven/Obsidian/Notes/Projects/claude-notes/**)",
       "Read(//Users/Steven/Obsidian/Notes/Projects/claude-plans/**)",
+      "Read(//Users/steven/Obsidian/Notes/Daily Notes/**)",
       "Read(//tmp/**)",
       "Skill(commit-changes)",
       "Skill(create-branch)",
@@ -111,6 +119,8 @@
       "Skill(push-to-origin)",
       "Skill(rebase-branch)",
       "Skill(stage-files)",
+      "SlashCommand(/issue *)",
+      "SlashCommand(/pr-comments *)",
       "WebFetch(domain:api.github.com)",
       "WebFetch(domain:github.com)",
       "WebSearch",
@@ -128,7 +138,8 @@
       "Bash(pnpm publish *)",
       "Bash(playwright-cli run-code *)",
       "Bash(playwright-cli eval *)",
-      "Read(//Users/steven/.claude/secrets/**)"
+      "Read(//Users/steven/.claude/secrets/**)",
+      "Read(//Users/steven/.pg_service.conf)"
     ],
     "defaultMode": "auto"
   },
@@ -141,6 +152,10 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/tmux-window-name.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/daily-note-reminder.sh"
           }
         ]
       }
@@ -149,6 +164,10 @@
       {
         "matcher": "Bash",
         "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/psql-safety.sh"
+          },
           {
             "type": "command",
             "command": "~/.claude/hooks/gh-api-readonly.sh"
@@ -207,6 +226,17 @@
           }
         ]
       }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/note-taking-precompact.sh"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -215,34 +245,14 @@
   },
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
-    "superpowers@superpowers-dev": true,
     "agent-md-refactor@agent-toolkit": true,
-    "range-dev@range-plugins": true,
-    "postgres@range-plugins": true,
-    "datadog@range-plugins": true,
-    "cloudwatch@range-plugins": true,
-    "redshift@range-plugins": true,
-    "work-tools@range-plugins": true,
-    "jira@range-plugins": true,
     "figma@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
-    "superpowers-dev": {
-      "source": {
-        "source": "github",
-        "repo": "obra/superpowers"
-      }
-    },
     "agent-toolkit": {
       "source": {
         "source": "github",
         "repo": "softaworks/agent-toolkit"
-      }
-    },
-    "range-plugins": {
-      "source": {
-        "source": "github",
-        "repo": "Range-Engineering/coding-agent-support"
       }
     },
     "claude-plugins-official": {
