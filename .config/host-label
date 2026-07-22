@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ -n "$CODER_WORKSPACE_NAME" ]; then
+    host="$CODER_WORKSPACE_NAME"
+elif command -v scutil >/dev/null 2>&1; then
+    host="$(scutil --get LocalHostName)"
+else
+    host="$(hostname)"
+    host="${host%%.*}"
+fi
+
+case "$host" in
+    StevenMBP|Range-Laptop) host=MBP ;;
+esac
+
+printf '%s\n' "$host"

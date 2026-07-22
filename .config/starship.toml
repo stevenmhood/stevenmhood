@@ -4,7 +4,7 @@ ${custom.host}$directory$python$git_branch$git_state$time
 '''
 
 [custom.host]
-command = '[ -n "$CODER_WORKSPACE_NAME" ] && echo "$CODER_WORKSPACE_NAME" || hostname -s'
+command = 'sh "$HOME/.config/host-label"'
 when = true
 shell = ['sh']
 format = '[($output):]($style)'
