@@ -166,10 +166,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/psql-safety.sh"
-          },
-          {
-            "type": "command",
             "command": "~/.claude/hooks/gh-api-readonly.sh"
           },
           {
@@ -264,5 +260,6 @@
   },
   "effortLevel": "high",
   "plansDirectory": "/Users/Steven/Obsidian/Notes/Projects/claude-plans",
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "skipWorkflowUsageWarning": true
 }
