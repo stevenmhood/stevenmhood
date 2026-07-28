@@ -84,6 +84,7 @@ fi
 MODEL_DISPLAY=""
 case "$MODEL_ID" in
     *"fable-5"*) MODEL_DISPLAY="Fable 5" ;;
+    *"opus-5"*) MODEL_DISPLAY="Opus 5" ;;
     *"opus-4-8"*) MODEL_DISPLAY="Opus 4.8" ;;
     *"opus-4-7"*) MODEL_DISPLAY="Opus 4.7" ;;
     *"opus-4-6"*) MODEL_DISPLAY="Opus 4.6" ;;
