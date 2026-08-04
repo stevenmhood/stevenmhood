@@ -240,7 +240,6 @@
     "command": "~/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
-    "superpowers@claude-plugins-official": true,
     "agent-md-refactor@agent-toolkit": true,
     "figma@claude-plugins-official": true
   },
