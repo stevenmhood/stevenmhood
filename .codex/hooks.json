@@ -1,0 +1,75 @@
+{
+  "description": "Personal lifecycle hooks shared across agent harnesses.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/agent-hooks/tmux-window-name.sh",
+            "statusMessage": "Updating tmux window name"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/agent-hooks/gh-api-readonly.sh",
+            "timeout": 5,
+            "statusMessage": "Checking GitHub API safety"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/agent-hooks/tmux-window-name.sh",
+            "timeout": 5,
+            "statusMessage": "Updating tmux window name"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/agent-hooks/attention-on.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/agent-hooks/attention-on.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/agent-hooks/attention-off.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

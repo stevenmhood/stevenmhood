@@ -151,7 +151,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-window-name.sh"
+            "command": "~/.config/agent-hooks/tmux-window-name.sh"
           },
           {
             "type": "command",
@@ -166,7 +166,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/gh-api-readonly.sh"
+            "command": "~/.config/agent-hooks/gh-api-readonly.sh"
           },
           {
             "type": "command",
@@ -181,7 +181,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-window-name.sh"
+            "command": "~/.config/agent-hooks/tmux-window-name.sh"
           }
         ]
       }
@@ -192,7 +192,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/claude-attention-on.sh"
+            "command": "~/.config/agent-hooks/attention-on.sh"
           }
         ]
       }
@@ -203,7 +203,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/claude-attention-on.sh"
+            "command": "~/.config/agent-hooks/attention-on.sh"
           }
         ]
       }
@@ -218,7 +218,7 @@
           },
           {
             "type": "command",
-            "command": "~/.claude/hooks/claude-attention-off.sh"
+            "command": "~/.config/agent-hooks/attention-off.sh"
           }
         ]
       }
