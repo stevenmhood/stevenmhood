@@ -25,9 +25,17 @@
 !.claude/settings.json
 !.claude/statusline-command.sh
 
+# .codex — track only the durable personal hook registrations. Codex runtime
+# config, trust state, sessions, auth, plugins, and caches remain ignored.
+!.codex/
+.codex/*
+!.codex/hooks.json
+
 # .config — starship + tmux drop-in fragments
 !.config/
 .config/*
+!.config/agent-hooks/
+!.config/agent-hooks/**
 !.config/git/
 .config/git/*
 !.config/git/config
