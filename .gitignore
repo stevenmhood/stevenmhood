@@ -22,8 +22,12 @@
 .claude/docs/plans/
 !.claude/hooks/
 !.claude/hooks/**
+.claude/**/*.log
 !.claude/settings.json
 !.claude/statusline-command.sh
+
+# Generated agent-hook state
+.local/state/agent-hooks/**/*.log
 
 # .codex — track only the durable personal hook registrations. Codex runtime
 # config, trust state, sessions, auth, plugins, and caches remain ignored.

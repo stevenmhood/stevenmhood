@@ -259,6 +259,6 @@
   },
   "effortLevel": "high",
   "plansDirectory": "/Users/Steven/Obsidian/Notes/Projects/claude-plans",
-  "skipAutoPermissionPrompt": true,
-  "skipWorkflowUsageWarning": true
+  "skipWorkflowUsageWarning": true,
+  "skipAutoPermissionPrompt": true
 }
