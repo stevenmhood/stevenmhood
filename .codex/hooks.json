@@ -21,6 +21,12 @@
             "command": "~/.config/agent-hooks/gh-api-readonly.sh",
             "timeout": 5,
             "statusMessage": "Checking GitHub API safety"
+          },
+          {
+            "type": "command",
+            "command": "~/.config/agent-hooks/git-safety.sh",
+            "timeout": 5,
+            "statusMessage": "Checking git safety"
           }
         ]
       }
@@ -63,6 +69,11 @@
     "UserPromptSubmit": [
       {
         "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/agent-hooks/demeanor-reminder.sh",
+            "timeout": 5
+          },
           {
             "type": "command",
             "command": "~/.config/agent-hooks/attention-off.sh",

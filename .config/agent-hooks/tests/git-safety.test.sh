@@ -2,7 +2,7 @@
 
 # Tests for git-safety.sh hook
 
-HOOK="$HOME/.claude/hooks/git-safety.sh"
+HOOK="${AGENT_HOOKS_DIR:-$HOME/.config/agent-hooks}/git-safety.sh"
 pass=0
 fail=0
 

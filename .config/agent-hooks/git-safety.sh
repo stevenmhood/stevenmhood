@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Git Safety Hook - Blocks destructive git operations
-# Triggered on PreToolUse for Bash commands
+# Git Safety Hook - Blocks destructive git operations for agent harnesses.
+# Triggered on PreToolUse for shell commands.
 
 # Read JSON input from Claude Code
 json_input=$(cat)

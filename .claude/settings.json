@@ -152,10 +152,6 @@
           {
             "type": "command",
             "command": "~/.config/agent-hooks/tmux-window-name.sh"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/daily-note-reminder.sh"
           }
         ]
       }
@@ -170,7 +166,7 @@
           },
           {
             "type": "command",
-            "command": "~/.claude/hooks/git-safety.sh"
+            "command": "~/.config/agent-hooks/git-safety.sh"
           }
         ]
       }
@@ -214,22 +210,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/demeanor-reminder.sh"
+            "command": "~/.config/agent-hooks/demeanor-reminder.sh"
           },
           {
             "type": "command",
             "command": "~/.config/agent-hooks/attention-off.sh"
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/note-taking-precompact.sh"
           }
         ]
       }

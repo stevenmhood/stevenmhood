@@ -20,8 +20,6 @@
 !.claude/docs/
 !.claude/docs/*
 .claude/docs/plans/
-!.claude/hooks/
-!.claude/hooks/**
 .claude/**/*.log
 !.claude/settings.json
 !.claude/statusline-command.sh
