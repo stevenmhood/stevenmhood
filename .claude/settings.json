@@ -245,5 +245,7 @@
   "effortLevel": "high",
   "plansDirectory": "/Users/Steven/Obsidian/Notes/Projects/claude-plans",
   "skipWorkflowUsageWarning": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "tui": "fullscreen",
+  "useAutoModeDuringPlan": true
 }
