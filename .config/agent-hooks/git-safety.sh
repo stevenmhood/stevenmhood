@@ -8,6 +8,31 @@ json_input=$(cat)
 command=$(echo "$json_input" | jq -r '.tool_input.command // empty')
 hook_event=$(echo "$json_input" | jq -r '.hook_event_name // empty')
 
+deny() {
+  local reason="$1"
+  case "$hook_event" in
+    PreToolUse)
+      cat <<EOF
+{
+  "hookSpecificOutput": {
+    "hookEventName": "$hook_event",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": $reason
+  }
+}
+EOF
+      ;;
+    pre_tool_use)
+      printf '%s' "$reason" | jq -r . >&2
+      ;;
+    *)
+      printf 'Unknown hook event %q; blocking destructive git command.\n' "$hook_event" >&2
+      printf '%s' "$reason" | jq -r . >&2
+      ;;
+  esac
+  exit 2
+}
+
 # Exit early if no command
 if [ -z "$command" ]; then
   exit 0
@@ -27,16 +52,7 @@ if echo "$command" | grep -qE '\bgit\b.*\breset\b.*--hard'; then
 `git reset --hard` is blocked. Use `git stash` or `git checkout -- <file>` instead.
 REASON
 )
-  cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "$hook_event",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": $reason
-  }
-}
-EOF
-  exit 2
+  deny "$reason"
 fi
 
 # Block: git clean -f
@@ -47,16 +63,7 @@ if echo "$command" | grep -qE '\bgit\b.*\bclean\b.*-[a-zA-Z]*f'; then
 `git clean -f` is blocked. Review untracked files manually before removing them.
 REASON
 )
-  cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "$hook_event",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": $reason
-  }
-}
-EOF
-  exit 2
+  deny "$reason"
 fi
 
 # Block: git branch -D
@@ -67,16 +74,7 @@ if echo "$command" | grep -qE '\bgit\b.*\bbranch\b.*-[a-zA-Z]*D'; then
 `git branch -D` (force delete) is blocked. Use `git branch -d` for safe deletion.
 REASON
 )
-  cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "$hook_event",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": $reason
-  }
-}
-EOF
-  exit 2
+  deny "$reason"
 fi
 
 # Block: git stash clear
@@ -87,16 +85,7 @@ if echo "$command" | grep -qE '\bgit\b.*\bstash\b.*\bclear\b'; then
 `git stash clear` is blocked. Use `git stash drop` to remove individual stashes.
 REASON
 )
-  cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "$hook_event",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": $reason
-  }
-}
-EOF
-  exit 2
+  deny "$reason"
 fi
 
 # Block: git commit --amend
@@ -107,16 +96,7 @@ if echo "$command" | grep -qE '\bgit\b.*\bcommit\b.*--amend'; then
 `git commit --amend` is blocked. Create a new commit instead.
 REASON
 )
-  cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "$hook_event",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": $reason
-  }
-}
-EOF
-  exit 2
+  deny "$reason"
 fi
 
 # Block: git push --force / -f (but not --force-with-lease which is safer)
@@ -127,16 +107,7 @@ if echo "$command" | grep -qE '\bgit\b.*\bpush\b.*(--force\b|-f\b)' && ! echo "$
 `git push --force` is blocked. Use `git push --force-with-lease` for safer force pushes, or regular push.
 REASON
 )
-  cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "$hook_event",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": $reason
-  }
-}
-EOF
-  exit 2
+  deny "$reason"
 fi
 
 # Block: git checkout -- . / git checkout . (discard all working tree changes)
@@ -147,16 +118,7 @@ if echo "$command" | grep -qE '\bgit\b.*\bcheckout\b.*--\s*\.' || echo "$command
 `git checkout -- .` is blocked. Use `git stash` to save changes, or checkout specific files.
 REASON
 )
-  cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "$hook_event",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": $reason
-  }
-}
-EOF
-  exit 2
+  deny "$reason"
 fi
 
 # Block: cd <path> && git ... — use git -C so it matches Bash(git *) permissions
@@ -167,16 +129,7 @@ if echo "$command" | grep -qE '\bcd\b.*[;&|]+.*\bgit\b'; then
 "cd <path> && git ..." does not match the Bash(git *) permission rule. Use "git -C <path> ..." instead.
 REASON
 )
-  cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "$hook_event",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": $reason
-  }
-}
-EOF
-  exit 2
+  deny "$reason"
 fi
 
 # All other git commands are allowed

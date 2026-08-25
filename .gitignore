@@ -4,6 +4,7 @@
 *
 
 # Top-level dotfiles
+!AGENTS.md
 !.bashrc
 !.dir_colors
 !.gitconfig

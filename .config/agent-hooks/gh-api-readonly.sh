@@ -14,7 +14,9 @@ if ! printf '%s' "$command" | grep -qE '\bgh\s+api\b'; then
 fi
 
 allow() {
-  cat <<EOF
+  case "$hook_event" in
+    PreToolUse)
+      cat <<EOF
 {
   "hookSpecificOutput": {
     "hookEventName": "$hook_event",
@@ -22,14 +24,25 @@ allow() {
   }
 }
 EOF
-  exit 0
+      exit 0
+      ;;
+    pre_tool_use)
+      exit 0
+      ;;
+    *)
+      printf 'Unknown hook event %q; blocking mutating GitHub API call.\n' "$hook_event" >&2
+      exit 2
+      ;;
+  esac
 }
 
 deny() {
   local msg="$1"
-  local reason
-  reason=$(printf '%s' "$msg" | jq -Rs .)
-  cat <<EOF
+  case "$hook_event" in
+    PreToolUse)
+      local reason
+      reason=$(printf '%s' "$msg" | jq -Rs .)
+      cat <<EOF
 {
   "hookSpecificOutput": {
     "hookEventName": "$hook_event",
@@ -38,6 +51,11 @@ deny() {
   }
 }
 EOF
+      ;;
+    *)
+      printf '%s\n' "$msg" >&2
+      ;;
+  esac
   exit 2
 }
 
@@ -63,6 +81,7 @@ printf '%s' "$command" | grep -qE "$repo/issues/[0-9]+/comments" && allow
 printf '%s' "$command" | grep -qE "$repo/pulls/[0-9]+/comments" && allow
 printf '%s' "$command" | grep -qE "$repo/pulls/[0-9]+/comments/[0-9]+/replies" && allow
 printf '%s' "$command" | grep -qE "$repo/pulls/comments/[0-9]+/replies" && allow
+printf '%s' "$command" | grep -qE "$repo/pulls/comments/[0-9]+([[:space:]]|$)" && allow
 printf '%s' "$command" | grep -qE "$repo/pulls/[0-9]+/reviews" && allow
 
 deny "# Mutating GitHub API Call Blocked
@@ -74,6 +93,7 @@ Allowed endpoints:
 - \`.../pulls/{num}/comments\`
 - \`.../pulls/{num}/comments/{id}/replies\`
 - \`.../pulls/comments/{id}/replies\`
+- \`.../pulls/comments/{id}\`
 - \`.../pulls/{num}/reviews\`
 
 All other write operations are blocked."
