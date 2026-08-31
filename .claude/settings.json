@@ -162,7 +162,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.config/agent-hooks/gh-api-readonly.sh"
+            "command": "~/.config/agent-hooks/gh-api-readonly.sh claude"
           },
           {
             "type": "command",

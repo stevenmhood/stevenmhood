@@ -3,33 +3,13 @@
 # Git Safety Hook - Blocks destructive git operations for agent harnesses.
 # Triggered on PreToolUse for shell commands.
 
-# Read JSON input from Claude Code
+# Read hook JSON input.
 json_input=$(cat)
 command=$(echo "$json_input" | jq -r '.tool_input.command // empty')
-hook_event=$(echo "$json_input" | jq -r '.hook_event_name // empty')
 
 deny() {
   local reason="$1"
-  case "$hook_event" in
-    PreToolUse)
-      cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "$hook_event",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": $reason
-  }
-}
-EOF
-      ;;
-    pre_tool_use)
-      printf '%s' "$reason" | jq -r . >&2
-      ;;
-    *)
-      printf 'Unknown hook event %q; blocking destructive git command.\n' "$hook_event" >&2
-      printf '%s' "$reason" | jq -r . >&2
-      ;;
-  esac
+  printf '%s' "$reason" | jq -r . >&2
   exit 2
 }
 

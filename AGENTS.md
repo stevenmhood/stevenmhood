@@ -2,36 +2,35 @@
 
 ## Agent hooks
 
-Hooks in `.config/agent-hooks/` are shared by Claude Code and Codex. Do not
-identify the harness from environment variables: a Claude process launched by
-Codex can inherit `CODEX_*` variables. Read `hook_event_name` from the hook's
-JSON stdin instead.
+Hooks in `.config/agent-hooks/` are shared by Claude Code and Codex. When a
+permission hook needs different harness contracts, pass the harness explicitly
+in its registration (for example, `hook.sh claude` or `hook.sh codex`). Do not
+infer it from environment variables, process ancestry, or `hook_event_name`.
 
-For pre-tool permission hooks, the event names and response contracts are:
+For pre-tool permission hooks, use these response contracts:
 
-| Harness | `hook_event_name` | Allowed operation | Blocked operation |
+| Harness and operation | stdout | stderr | Exit code |
 | --- | --- | --- | --- |
-| Claude Code | `PreToolUse` | Exit 0; `permissionDecision: "allow"` JSON on stdout is supported | Denial JSON on stdout with `permissionDecision: "deny"` and `permissionDecisionReason`; exit 2; no stderr |
-| Codex | `pre_tool_use` | Exit 0 with no stdout or stderr | Human-readable reason on stderr; exit 2; no stdout |
+| Claude allowed, when an explicit grant is needed | `permissionDecision: "allow"` JSON | Empty | 0 |
+| Codex allowed | Empty | Empty | 0 |
+| Blocked, any harness | Empty | Human-readable blocking reason | 2 |
 
-Unknown event-name variants must never receive a Claude-specific allow or deny
-decision. For a mutation or destructive operation, fail closed with a readable
-stderr reason and exit 2. Commands outside a permission hook's scope may exit 0
-silently.
+For a mutation or destructive operation, fail closed with a readable stderr
+reason and exit 2. Commands outside a permission hook's scope must exit 0
+silently. An unknown harness argument must never receive a structured grant;
+operations classified as unsafe must still fail closed.
 
-Only permission hooks need this allow/deny bifurcation. Lifecycle hooks that do
-not make permission decisions should remain silent unless their configured
-event explicitly supports output. Preserve the incoming event name when an
-event-specific JSON response is supported; do not translate event-name casing.
+Lifecycle hooks that do not make permission decisions should remain silent
+unless their configured event explicitly supports output. Preserve the incoming
+event name when event-specific JSON output is supported.
 
 When adding or changing a permission hook:
 
 1. Add tests before changing the hook.
-2. Exercise both `PreToolUse` and `pre_tool_use` inputs.
+2. Exercise every explicitly supported harness argument.
 3. Assert stdout, stderr, and exit code independently for an allowed operation
    and a blocked operation.
-4. Cover an unknown event-name variant and require fail-closed behavior for
-   operations that need a permission decision.
+4. Cover both an allowed operation and every blocked-operation category.
 5. Keep endpoint or command classification tests separate from harness output
    contract tests.
 6. Run the focused test, all tests in `.config/agent-hooks/tests/`, `bash -n` on

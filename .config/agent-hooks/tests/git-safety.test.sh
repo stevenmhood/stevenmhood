@@ -20,17 +20,16 @@ run_hook() {
 
 run_test() {
   local cmd="$1" expect="$2" label="$3"
-  local result
-  result=$(echo "{\"tool_input\":{\"command\":\"$cmd\"},\"hook_event_name\":\"PreToolUse\"}" | bash "$HOOK" | jq -r '.hookSpecificOutput.permissionDecision // "allow"')
+  run_hook PreToolUse "$cmd"
   local check="PASS"
-  if [[ "$expect" == "deny" && "$result" != "deny" ]]; then check="FAIL"; fi
-  if [[ "$expect" == "allow" && "$result" == "deny" ]]; then check="FAIL"; fi
+  if [[ "$expect" == "deny" && !( "$status" == 2 && -z "$stdout" && -n "$stderr" ) ]]; then check="FAIL"; fi
+  if [[ "$expect" == "allow" && !( "$status" == 0 && -z "$stdout" && -z "$stderr" ) ]]; then check="FAIL"; fi
   if [[ "$check" == "PASS" ]]; then
     pass=$((pass + 1))
   else
     fail=$((fail + 1))
   fi
-  printf "%-4s %-7s %s\n" "$check" "[$result]" "$label"
+  printf "%-4s %-7s %s\n" "$check" "[$expect]" "$label"
 }
 
 echo "=== git-safety.sh tests ==="
@@ -38,33 +37,17 @@ echo ""
 
 echo "--- Harness output contracts ---"
 run_hook PreToolUse 'git reset --hard'
-if [[ "$status" == 2 && -z "$stderr" ]] &&
-  [[ $(printf '%s' "$stdout" | jq -r '.hookSpecificOutput.permissionDecision') == deny ]] &&
-  [[ $(printf '%s' "$stdout" | jq -r '.hookSpecificOutput.permissionDecisionReason') == *'Destructive Operation Blocked'* ]]; then
-  pass=$((pass + 1)); printf 'PASS Claude denial uses JSON on stdout\n'
-else
-  fail=$((fail + 1)); printf 'FAIL Claude denial contract: status=%s stdout=%q stderr=%q\n' "$status" "$stdout" "$stderr"
-fi
-
-run_hook pre_tool_use 'git reset --hard'
 if [[ "$status" == 2 && -z "$stdout" && "$stderr" == *'Destructive Operation Blocked'* ]]; then
-  pass=$((pass + 1)); printf 'PASS Codex denial uses stderr\n'
+  pass=$((pass + 1)); printf 'PASS denial uses stderr with no stdout\n'
 else
-  fail=$((fail + 1)); printf 'FAIL Codex denial contract: status=%s stdout=%q stderr=%q\n' "$status" "$stdout" "$stderr"
+  fail=$((fail + 1)); printf 'FAIL portable denial contract: status=%s stdout=%q stderr=%q\n' "$status" "$stdout" "$stderr"
 fi
 
-run_hook FutureToolUse 'git reset --hard'
-if [[ "$status" == 2 && -z "$stdout" && "$stderr" == *'Unknown hook event'* ]]; then
-  pass=$((pass + 1)); printf 'PASS Unknown event fails closed\n'
-else
-  fail=$((fail + 1)); printf 'FAIL Unknown-event contract: status=%s stdout=%q stderr=%q\n' "$status" "$stdout" "$stderr"
-fi
-
-run_hook pre_tool_use 'git status'
+run_hook PreToolUse 'git status'
 if [[ "$status" == 0 && -z "$stdout" && -z "$stderr" ]]; then
-  pass=$((pass + 1)); printf 'PASS Codex allowed command is silent\n'
+  pass=$((pass + 1)); printf 'PASS allowed command is silent\n'
 else
-  fail=$((fail + 1)); printf 'FAIL Codex allow contract: status=%s stdout=%q stderr=%q\n' "$status" "$stdout" "$stderr"
+  fail=$((fail + 1)); printf 'FAIL portable allow contract: status=%s stdout=%q stderr=%q\n' "$status" "$stdout" "$stderr"
 fi
 
 echo ""

@@ -3,9 +3,9 @@
 # Blocks mutating `gh api` calls from agent harnesses.
 # Comment, reply, and review endpoints remain writable.
 
+harness="${1:-}"
 json_input=$(cat)
 command=$(printf '%s' "$json_input" | jq -r '.tool_input.command // empty')
-hook_event=$(printf '%s' "$json_input" | jq -r '.hook_event_name // empty')
 
 [ -n "$command" ] || exit 0
 
@@ -14,48 +14,20 @@ if ! printf '%s' "$command" | grep -qE '\bgh\s+api\b'; then
 fi
 
 allow() {
-  case "$hook_event" in
-    PreToolUse)
-      cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "$hook_event",
-    "permissionDecision": "allow"
-  }
-}
-EOF
-      exit 0
-      ;;
-    pre_tool_use)
-      exit 0
-      ;;
-    *)
-      printf 'Unknown hook event %q; blocking mutating GitHub API call.\n' "$hook_event" >&2
-      exit 2
-      ;;
-  esac
+  if [ "$harness" = claude ]; then
+    jq -n '{
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "allow"
+      }
+    }'
+  fi
+  exit 0
 }
 
 deny() {
   local msg="$1"
-  case "$hook_event" in
-    PreToolUse)
-      local reason
-      reason=$(printf '%s' "$msg" | jq -Rs .)
-      cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "$hook_event",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": $reason
-  }
-}
-EOF
-      ;;
-    *)
-      printf '%s\n' "$msg" >&2
-      ;;
-  esac
+  printf '%s\n' "$msg" >&2
   exit 2
 }
 
