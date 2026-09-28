@@ -82,14 +82,20 @@ if [[ "$MODEL_ID" =~ \[([0-9]+[km])\]$ ]]; then
 fi
 
 MODEL_DISPLAY=""
+# First match wins: point releases (e.g. opus-5-5) must precede their
+# major-version pattern (opus-5), which would otherwise swallow them.
 case "$MODEL_ID" in
+    *"fable-5-1"*) MODEL_DISPLAY="Fable 5.1" ;;
     *"fable-5"*) MODEL_DISPLAY="Fable 5" ;;
+    *"opus-5-5"*) MODEL_DISPLAY="Opus 5.5" ;;
     *"opus-5"*) MODEL_DISPLAY="Opus 5" ;;
     *"opus-4-8"*) MODEL_DISPLAY="Opus 4.8" ;;
     *"opus-4-7"*) MODEL_DISPLAY="Opus 4.7" ;;
     *"opus-4-6"*) MODEL_DISPLAY="Opus 4.6" ;;
+    *"sonnet-5-5"*) MODEL_DISPLAY="Sonnet 5.5" ;;
     *"sonnet-5"*) MODEL_DISPLAY="Sonnet 5" ;;
     *"sonnet-4-6"*) MODEL_DISPLAY="Sonnet 4.6" ;;
+    *"haiku-5-5"*) MODEL_DISPLAY="Haiku 5.5" ;;
     *"haiku-4-5"*) MODEL_DISPLAY="Haiku 4.5" ;;
     *) MODEL_DISPLAY="${BOLD}${RED}${MODEL_ID}${RESET}" ;;
 esac
