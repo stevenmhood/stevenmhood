@@ -224,28 +224,10 @@
     "type": "command",
     "command": "~/.claude/statusline-command.sh"
   },
-  "enabledPlugins": {
-    "agent-md-refactor@agent-toolkit": true,
-    "figma@claude-plugins-official": true
-  },
-  "extraKnownMarketplaces": {
-    "agent-toolkit": {
-      "source": {
-        "source": "github",
-        "repo": "softaworks/agent-toolkit"
-      }
-    },
-    "claude-plugins-official": {
-      "source": {
-        "source": "github",
-        "repo": "anthropics/claude-plugins-official"
-      }
-    }
-  },
   "effortLevel": "high",
   "plansDirectory": "/Users/Steven/Obsidian/Notes/Projects/claude-plans",
+  "tui": "fullscreen",
   "skipWorkflowUsageWarning": true,
   "skipAutoPermissionPrompt": true,
-  "tui": "fullscreen",
   "useAutoModeDuringPlan": true
 }
