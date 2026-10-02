@@ -88,6 +88,14 @@ assert_deny claude "$blocked_write" 'PATCH pull request is blocked with stderr r
 assert_deny codex "$blocked_write" 'PATCH pull request is blocked with stderr reason'
 assert_deny unknown "$blocked_write" 'unknown harness fails closed with stderr reason'
 
+graphql_read='gh api graphql -f query={ repository(owner:\\\"o\\\", name:\\\"r\\\") { pullRequest(number: 1) { title } } }'
+assert_codex_allow "$graphql_read" 'GraphQL query is a read'
+assert_contract claude "$graphql_read" 0 '' '' 'GraphQL query receives no explicit grant'
+
+graphql_write='gh api graphql -f query=mutation { resolveReviewThread(input: {threadId: \\\"x\\\"}) { thread { id } } }'
+assert_deny codex "$graphql_write" 'GraphQL mutation is blocked'
+assert_deny claude "$graphql_write" 'GraphQL mutation is blocked'
+
 # Preserve the existing writable endpoint families for both harnesses.
 for cmd in \
   'gh api repos/owner/repo/issues/42/comments -X POST -f body=hi' \

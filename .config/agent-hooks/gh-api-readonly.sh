@@ -37,6 +37,13 @@ if printf '%s' "$command" | grep -iE '(-X|--method)\s+GET\b' >/dev/null; then
   exit 0
 fi
 
+# GraphQL reads always POST with -f query=...; only a `mutation` operation
+# writes.
+if printf '%s' "$command" | grep -qE '\bgh\s+api\s+graphql\b' &&
+  ! printf '%s' "$command" | grep -qiE '\bmutation\b'; then
+  exit 0
+fi
+
 is_mutation=false
 if printf '%s' "$command" | grep -iE '(-X|--method)\s+(POST|PUT|DELETE|PATCH)' >/dev/null; then
   is_mutation=true
