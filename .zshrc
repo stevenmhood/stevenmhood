@@ -5,11 +5,6 @@ if [[ "$(umask)" = "000" ]]; then
     umask 022
 fi
 
-# Check for WSL
-if [[ -f /proc/sys/fs/binfmt_misc/WSLInterop ]]; then
-    source ~/.zshrc.d/wsl.zsh
-fi
-
 # Add ~/bin to $PATH
 case ":${PATH}:" in
     *:"$HOME/bin":*) ;;   # Already exists
@@ -54,14 +49,6 @@ if [[ -f /opt/homebrew/bin/brew ]]; then
             GNU_MANPATH=$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman
             MANPATH=$GNU_MANPATH:$MANPATH
     esac
-fi
-
-if [[ -f ~/.zshrc.d/git.zsh ]]; then
-    source ~/.zshrc.d/git.zsh
-fi
-
-if [[ -f ~/.zshrc.d/python.zsh ]]; then
-    source ~/.zshrc.d/python.zsh
 fi
 
 # Always UTF-8
@@ -155,17 +142,7 @@ if [[ -f ~/.ssh-agent-rc ]]; then
     source ~/.ssh-agent-rc
 fi
 
-# Hook up direnv, if it exists
-if [[ -f ~/.zshrc.d/direnv.zsh ]]; then
-    source ~/.zshrc.d/direnv.zsh
-fi
-
 autoload -Uz compinit && compinit
-
-# znap + plugins (must come after compinit)
-if [[ -f ~/.zshrc.d/znap.zsh ]]; then
-    source ~/.zshrc.d/znap.zsh
-fi
 
 # Tmux window naming: clear @branch pane option so status bar
 # falls back to #{b:pane_current_path} for interactive shells
@@ -175,13 +152,11 @@ _tmux_window_name() {
 }
 add-zsh-hook precmd _tmux_window_name
 
-# Set up Node
-# For reasons I don't (yet) understand, this must be after my own call to `compinit`
-if [[ -f ~/.zshrc.d/node.zsh ]]; then
-    source ~/.zshrc.d/node.zsh
-fi
-
-if [[ -f ~/.zshrc.d/range.zsh ]]; then
-    source ~/.zshrc.d/range.zsh
-fi
-
+# Source every fragment in ~/.zshrc.d/ in numeric order (NN-name.zsh). This is
+# the only place fragments are sourced: Range adds its own files to the same
+# directory (50-range*, 90-range-tmux on Coder) and relies on this loop. It
+# must stay below `compinit`: znap and node need it. 05 env, 10-30 tools,
+# 40 node, 50 Range, 80 znap (syntax highlighting last), 90 must-be-last.
+for f in ~/.zshrc.d/*.zsh(N); do
+    source "$f"
+done
