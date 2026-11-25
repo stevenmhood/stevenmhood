@@ -29,6 +29,33 @@ deny() {
 
 [ -n "$command" ] || exit 0
 
+# Drop the body of a heredoc whose delimiter is quoted (<<'EOF', <<"EOF", <<\EOF).
+# The shell never expands those, so backtick-quoted prose in a commit message or
+# PR body (`gh pr merge *`) is inert text, not a command substitution. Unquoted
+# heredocs expand backticks and are still scanned. A body is dropped only when
+# its terminator line is found; otherwise the text is kept and scanned.
+command=$(printf '%s\n' "$command" | awk '
+  { line[NR] = $0 }
+  END {
+    i = 1
+    while (i <= NR) {
+      print line[i]
+      i++
+      if (!match(line[i - 1], /<<-?[ \t]*(\047[^\047]+\047|"[^"]+"|\\[A-Za-z_][A-Za-z0-9_]*)/)) continue
+      if (RSTART > 1 && substr(line[i - 1], RSTART - 1, 1) == "<") continue # <<< here-string
+      op = substr(line[i - 1], RSTART, RLENGTH)
+      dash = (op ~ /^<<-/)
+      sub(/^<<-?[ \t]*/, "", op)
+      gsub(/[\047"\\]/, "", op)
+      for (j = i; j <= NR; j++) {
+        term = line[j]
+        if (dash) sub(/^\t+/, "", term)
+        if (term == op) break
+      }
+      if (j <= NR) i = j + 1
+    }
+  }')
+
 # Newlines separate commands; fd redirections (`2>&1`, `&>f`) contain `&`, which
 # would otherwise read as a separator and cut a merge's arguments short.
 flat=$(printf '%s' "$command" |

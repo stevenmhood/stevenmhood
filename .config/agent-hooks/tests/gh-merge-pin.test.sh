@@ -110,6 +110,21 @@ run_test "echo 'Bash(gh pr merge *)'" allow "permission rule text in quotes"
 run_test "jq '.allow += [\"Bash(gh pr merge *)\"]' settings.json" allow "permission rule text in jq filter"
 run_test "" allow "empty command"
 
+echo "--- Backtick mentions inside inert heredoc bodies ---"
+run_test $'git commit -F - <<\'EOF\'\nAllow `gh pr merge *` in settings\nEOF' allow "quoted heredoc, backtick mention"
+run_test $'git commit -F - <<"EOF"\nAllow `gh pr merge *` in settings\nEOF' allow "double-quoted heredoc delimiter"
+run_test $'cat <<\\EOF\nAllow `gh pr merge *` in settings\nEOF' allow "backslash heredoc delimiter"
+run_test $'cat <<-\'EOF\'\n\tAllow `gh pr merge *` in settings\n\tEOF' allow "tab-indented <<- heredoc"
+run_test $'git commit -F - <<\'EOF\' && git push\nAllow `gh pr merge *` in settings\nEOF' allow "command continues after heredoc operator"
+
+echo "--- Backtick invocations that must still be seen ---"
+run_test 'echo `gh pr merge 42`' deny "bare backtick substitution"
+run_test 'echo "`gh pr merge 42`"' deny "backtick inside double quotes"
+run_test $'cat <<EOF\n`gh pr merge 42`\nEOF' deny "unquoted heredoc still expands backticks"
+run_test $'cat <<\'EOF\'\n`gh pr merge 42`' deny "quoted heredoc with no terminator is not stripped"
+run_test $'cat <<\'EOF\'\ntext\nEOF\ngh pr merge 42' deny "merge after a quoted heredoc"
+run_test $'cat <<\'EOF\'\ntext\nEOF\n`gh pr merge 42`' deny "backtick merge after a quoted heredoc"
+
 echo
 echo "pass=$pass fail=$fail"
 [ "$fail" -eq 0 ]
