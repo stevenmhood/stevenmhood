@@ -27,6 +27,12 @@
             "command": "~/.config/agent-hooks/git-safety.sh",
             "timeout": 5,
             "statusMessage": "Checking git safety"
+          },
+          {
+            "type": "command",
+            "command": "~/.config/agent-hooks/gh-merge-pin.sh codex",
+            "timeout": 5,
+            "statusMessage": "Checking merge pin"
           }
         ]
       }

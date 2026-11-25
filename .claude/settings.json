@@ -54,6 +54,7 @@
       "Bash(gh pr diff *)",
       "Bash(gh pr edit *)",
       "Bash(gh pr list *)",
+      "Bash(gh pr merge *)",
       "Bash(gh pr ready *)",
       "Bash(gh pr view *)",
       "Bash(gh run list *)",
@@ -167,6 +168,10 @@
           {
             "type": "command",
             "command": "~/.config/agent-hooks/git-safety.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.config/agent-hooks/gh-merge-pin.sh claude"
           }
         ]
       }
